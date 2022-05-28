@@ -15,7 +15,7 @@ function CatsList() {
         if (catsData === null) setCatsData(data);
         else if (catsData.length > 0) setCatsData([...catsData, ...data]);
       });
-  }, [isBottom]);
+  }, [catsData, isBottom]);
 
   window.onscroll = function () {
     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
