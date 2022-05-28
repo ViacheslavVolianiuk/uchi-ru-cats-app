@@ -5,14 +5,14 @@ import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
 
 function CatsList() {
+  const [catsData, setCatsData] = useState([]);
   const [isBottom, setIsBottom] = useState(false);
   useEffect(() => {
-    const [catsData, setCatsData] = useState(null);
     fetch('https://api.thecatapi.com/v1/images/search?limit=100')
       .then((res) => res.json())
       .then((data) => {
         data.forEach((item) => (item.liked = false));
-        if (catsData === null) setCatsData(data);
+        if (catsData.length === 0) setCatsData(data);
         else if (catsData.length > 0) setCatsData([...catsData, ...data]);
       });
     // eslint-disable-line react-hooks/exhaustive-deps
