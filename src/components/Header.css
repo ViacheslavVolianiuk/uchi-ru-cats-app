@@ -1,0 +1,40 @@
+.header {
+  height: 11vh;
+  background-color: #748ffc;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin-bottom: 15rem;
+  z-index: 35;
+}
+.btn {
+  border: none;
+  height: 100%;
+  color: #fff;
+  background-color: inherit;
+  font-size: 2rem;
+  padding: 0 3rem;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: #5c7cfa;
+}
+.link {
+  height: 100%;
+}
+.link:first-child {
+  margin-left: 6rem;
+}
+@media only screen and (max-width: 34.3em) {
+  .btn {
+    font-size: 1.5rem;
+  }
+  .link:first-child {
+    margin-left: 0;
+  }
+  .header {
+    justify-content: center;
+  }
+}

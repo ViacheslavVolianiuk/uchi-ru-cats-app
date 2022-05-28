@@ -1,0 +1,59 @@
+.cats-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 13rem 6rem;
+  justify-content: center;
+  gap: 3rem;
+}
+@media only screen and (max-width: 86.5em) {
+  .cats-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media only screen and (max-width: 71.3em) {
+  .cats-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media only screen and (max-width: 53.7em) {
+  .cats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  html {
+    font-size: 80%;
+  }
+}
+@media only screen and (max-width: 45em) {
+  .cats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  html {
+    font-size: 70%;
+  }
+}
+@media only screen and (max-width: 39.3em) {
+  .cats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  html {
+    font-size: 62.5%;
+  }
+}
+@media only screen and (max-width: 34.3em) {
+  .cats-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  html {
+    font-size: 100%;
+  }
+}
+@media only screen and (max-width: 28.1em) {
+  html {
+    font-size: 80%;
+  }
+}
+@media only screen and (max-width: 22.1em) {
+  html {
+    font-size: 70%;
+  }
+}
