@@ -8,7 +8,7 @@ function CatsList() {
   const [catsData, setCatsData] = useState([]);
   const [isBottom, setIsBottom] = useState(false);
   useEffect(() => {
-    fetch('https://api.thecatapi.com/v1/images/search?limit=100')
+    fetch('https://api.thecatapi.com/v1/images/search?limit=40')
       .then((res) => res.json())
       .then((data) => {
         data.forEach((item) => (item.liked = false));

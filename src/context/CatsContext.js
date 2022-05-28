@@ -12,6 +12,7 @@ export const CatsProvider = ({ children }) => {
   };
   const deleteLikedCats = (el) => {
     setLikedCats(likedCats.filter((item) => item !== el));
+    window.localStorage.setItem('likedCats', JSON.stringify(likedCats));
   };
 
   return (
