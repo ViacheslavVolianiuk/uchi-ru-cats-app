@@ -10,7 +10,7 @@ function CatCard({ url, liked }) {
       <img
         className="cat-img"
         src={url}
-        alt="Cat image"
+        alt="Cat"
         onDoubleClick={(e) => {
           if (isHeartFill === false) {
             addLikedCats(e.target.getAttribute('src'));
