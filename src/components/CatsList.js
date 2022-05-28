@@ -5,9 +5,9 @@ import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
 
 function CatsList() {
-  const [catsData, setCatsData] = useState(null);
   const [isBottom, setIsBottom] = useState(false);
   useEffect(() => {
+    const [catsData, setCatsData] = useState(null);
     fetch('https://api.thecatapi.com/v1/images/search?limit=100')
       .then((res) => res.json())
       .then((data) => {
