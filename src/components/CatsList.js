@@ -15,6 +15,7 @@ function CatsList() {
         if (catsData === null) setCatsData(data);
         else if (catsData.length > 0) setCatsData([...catsData, ...data]);
       });
+    // eslint-disable-line react-hooks/exhaustive-deps
   }, [isBottom]);
 
   window.onscroll = function () {
