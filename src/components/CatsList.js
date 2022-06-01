@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import CatCard from './CatCard';
 import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
+import LazyLoad from 'react-lazyload';
 
 function CatsList() {
   const [catsData, setCatsData] = useState([]);
@@ -13,7 +14,8 @@ function CatsList() {
       .then((data) => {
         data.forEach((item) => (item.liked = false));
         if (catsData.length === 0) setCatsData(data);
-        else if (catsData.length > 0) setCatsData([...catsData, ...data]);
+        else if (catsData.length > 0)
+          setCatsData(Array.from(new Set([...catsData, ...data])));
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBottom]);
@@ -33,7 +35,9 @@ function CatsList() {
     <div className="cats-list">
       {catsData &&
         catsData.map((item) => (
-          <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
+          <LazyLoad>
+            <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
+          </LazyLoad>
         ))}
     </div>
   );
