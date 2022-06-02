@@ -14,8 +14,7 @@ function CatsList() {
       .then((data) => {
         data.forEach((item) => (item.liked = false));
         if (catsData.length === 0) setCatsData(data);
-        else if (catsData.length > 0)
-          setCatsData(Array.from(new Set([...catsData, ...data])));
+        else if (catsData.length > 0) setCatsData([...catsData, ...data]);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBottom]);
