@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import CatCard from './CatCard';
 import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
-import LazyLoad from 'react-lazyload';
 
 function CatsList() {
   const [catsData, setCatsData] = useState([]);
@@ -34,9 +33,7 @@ function CatsList() {
     <div className="cats-list">
       {catsData &&
         catsData.map((item) => (
-          <LazyLoad>
-            <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
-          </LazyLoad>
+          <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
         ))}
     </div>
   );
