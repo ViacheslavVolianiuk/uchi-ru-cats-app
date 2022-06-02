@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const CatsContext = createContext();
 
@@ -8,13 +8,14 @@ export const CatsProvider = ({ children }) => {
   const [likedCats, setLikedCats] = useState(catsStorage);
   const addLikedCats = (el) => {
     setLikedCats([el, ...likedCats]);
-    window.localStorage.setItem('likedCats', JSON.stringify(likedCats));
   };
 
   const deleteLikedCats = (el) => {
     setLikedCats(likedCats.filter((item) => item !== el));
-    window.localStorage.setItem('likedCats', JSON.stringify(likedCats));
   };
+  useEffect(() => {
+    window.localStorage.setItem('likedCats', JSON.stringify(likedCats));
+  }, [likedCats]);
 
   return (
     <CatsContext.Provider value={{ addLikedCats, likedCats, deleteLikedCats }}>
