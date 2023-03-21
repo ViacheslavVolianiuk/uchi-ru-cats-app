@@ -1,36 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import CatCard from './CatCard';
 import './CatsList.css';
-import { v4 as uuidv4 } from 'uuid';
 
 function CatsList() {
   const [catsData, setCatsData] = useState([]);
-  const [isBottom, setIsBottom] = useState(false);
+  const [isBottom, setIsBottom] = useState(() => false);
 
   // Use a ref to keep track of the last cat card element
   const lastCatCardRef = useRef(null);
 
-  useEffect(() => {
-    fetch('https://api.thecatapi.com/v1/images/search?limit=40')
-      .then((res) => res.json())
-      .then((data) => {
-        data.forEach((item) => (item.liked = false));
-        setCatsData(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (!isBottom) return;
-
+  const fetchCats = useCallback(() => {
     fetch('https://api.thecatapi.com/v1/images/search?limit=40')
       .then((res) => res.json())
       .then((data) => {
         data.forEach((item) => (item.liked = false));
         setCatsData((prevCatsData) => [...prevCatsData, ...data]);
+        setIsBottom(false);
       });
+  }, []);
 
-    setIsBottom(false);
-  }, [isBottom]);
+  useEffect(() => {
+    fetchCats();
+  }, [fetchCats]);
 
   useEffect(() => {
     // Create a new IntersectionObserver instance
@@ -38,7 +29,7 @@ function CatsList() {
       entries.forEach((entry) => {
         // If the element is visible, fetch more cats
         if (entry.isIntersecting) {
-          setIsBottom(true);
+          setIsBottom(() => true);
         }
       });
     });
@@ -54,25 +45,23 @@ function CatsList() {
     };
   }, [lastCatCardRef]);
 
+  useEffect(() => {
+    if (isBottom) {
+      fetchCats();
+    }
+  }, [isBottom, fetchCats]);
+
   return (
     <div className="cats-list">
       {catsData &&
-        catsData.map((item, index) => {
-          if (index === catsData.length - 1) {
-            return (
-              <CatCard
-                key={uuidv4()}
-                ref={lastCatCardRef}
-                url={item.url}
-                liked={item.liked}
-              />
-            );
-          } else {
-            return (
-              <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
-            );
-          }
-        })}
+        catsData.map((item, index) => (
+          <CatCard
+            key={item.id}
+            ref={index === catsData.length - 1 ? lastCatCardRef : null}
+            url={item.url}
+            liked={item.liked}
+          />
+        ))}
     </div>
   );
 }
