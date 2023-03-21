@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CatCard from './CatCard';
 import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
