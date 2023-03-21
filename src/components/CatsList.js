@@ -10,14 +10,16 @@ function CatsList() {
   // Use a ref to keep track of the last cat card element
   const lastCatCardRef = useRef(null);
 
-  const fetchCats = () => {
-    fetch('https://api.thecatapi.com/v1/images/search?limit=40')
-      .then((res) => res.json())
-      .then((data) => {
-        data.forEach((item) => (item.liked = false));
-        setCatsData((prevCatsData) => [...prevCatsData, ...data]);
-      });
-  };
+  const fetchCats = useCallback(() => {
+  fetch(`https://api.thecatapi.com/v1/images/search?limit=${perPage}&page=${page}`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((item) => (item.liked = false));
+      setCatsData((prevCatsData) => [...prevCatsData, ...data]);
+      setIsLoading(false);
+      setPage((prevPage) => prevPage + 1);
+    });
+}, [perPage, page]);
 
   useEffect(() => {
     fetchCats();
