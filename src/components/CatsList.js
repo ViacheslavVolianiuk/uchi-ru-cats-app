@@ -6,8 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 function CatsList() {
   const [catsData, setCatsData] = useState([]);
   const [isBottom, setIsBottom] = useState(false);
-  const [lastCardIndex, setLastCardIndex] = useState(0);
-  const lastCatCardRef = useRef(null);
+
+  // Use a ref to keep track of the second-last cat card element
+  const secondLastCatCardRef = useRef(null);
 
   useEffect(() => {
     fetch('https://api.thecatapi.com/v1/images/search?limit=40')
@@ -15,7 +16,6 @@ function CatsList() {
       .then((data) => {
         data.forEach((item) => (item.liked = false));
         setCatsData(data);
-        setLastCardIndex(data.length - 1);
       });
   }, []);
 
@@ -27,46 +27,60 @@ function CatsList() {
       .then((data) => {
         data.forEach((item) => (item.liked = false));
         setCatsData((prevCatsData) => [...prevCatsData, ...data]);
-        setLastCardIndex(prevLastCardIndex => prevLastCardIndex + data.length);
       });
 
     setIsBottom(false);
   }, [isBottom]);
 
   useEffect(() => {
+    // Create a new IntersectionObserver instance
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setIsBottom(true);
+        // If the second-last cat card is visible, fetch more cats
+        if (entry.target === secondLastCatCardRef.current) {
+          const { offsetHeight } = document.documentElement;
+          const { scrollHeight, scrollTop } = document.body;
+          if (scrollTop + offsetHeight >= scrollHeight - 100) {
+            setIsBottom(true);
+          }
         }
       });
     });
 
-    if (lastCatCardRef.current) {
-      observer.observe(lastCatCardRef.current);
+    // Observe the second-last cat card element
+    if (secondLastCatCardRef.current) {
+      observer.observe(secondLastCatCardRef.current);
     }
 
+    // Cleanup function to disconnect observer
     return () => {
       observer.disconnect();
     };
-  }, [lastCardIndex]);
+  }, [secondLastCatCardRef]);
 
   return (
     <div className="cats-list">
-      {catsData.map((item, index) => {
-        if (index === lastCardIndex) {
-          return (
-            <CatCard
-              key={uuidv4()}
-              ref={lastCatCardRef}
-              url={item.url}
-              liked={item.liked}
-            />
-          );
-        } else {
-          return <CatCard key={uuidv4()} url={item.url} liked={item.liked} />;
-        }
-      })}
+      {catsData &&
+        catsData.map((item, index) => {
+          if (index === catsData.length - 2) {
+            return (
+              <CatCard
+                key={uuidv4()}
+                ref={secondLastCatCardRef}
+                url={item.url}
+                liked={item.liked}
+              />
+            );
+          } else if (index === catsData.length - 1) {
+            return (
+              <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
+            );
+          } else {
+            return (
+              <CatCard key={uuidv4()} url={item.url} liked={item.liked} />
+            );
+          }
+        })}
     </div>
   );
 }
