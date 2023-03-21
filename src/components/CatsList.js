@@ -1,29 +1,32 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import CatCard from './CatCard';
 import './CatsList.css';
 import { v4 as uuidv4 } from 'uuid';
 
-function CatsList() {
+function CatsList({ perPage }) {
   const [catsData, setCatsData] = useState([]);
   const [isBottom, setIsBottom] = useState(false);
+  const [page, setPage] = useState(1);
 
   // Use a ref to keep track of the last cat card element
   const lastCatCardRef = useRef(null);
 
   const fetchCats = useCallback(() => {
-  fetch(`https://api.thecatapi.com/v1/images/search?limit=${perPage}&page=${page}`)
-    .then((res) => res.json())
-    .then((data) => {
-      data.forEach((item) => (item.liked = false));
-      setCatsData((prevCatsData) => [...prevCatsData, ...data]);
-      setIsLoading(false);
-      setPage((prevPage) => prevPage + 1);
-    });
-}, [perPage, page]);
+    fetch(`https://api.thecatapi.com/v1/images/search?limit=${perPage}&page=${page}`)
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach((item) => (item.liked = false));
+        setCatsData((prevCatsData) => [...prevCatsData, ...data]);
+        setPage((prevPage) => prevPage + 1);
+      })
+      .catch((error) => {
+        console.log('Error fetching cats:', error);
+      });
+  }, [perPage, page]);
 
   useEffect(() => {
     fetchCats();
-  }, []);
+  }, [fetchCats]);
 
   useEffect(() => {
     if (!isBottom) return;
